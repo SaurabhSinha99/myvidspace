@@ -1,0 +1,52 @@
+<!-- templates/echovault/query_vectorstore.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask a Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        textarea, select {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ask a Question About Your Uploaded Video</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="query">Enter your question:</label>
+        <textarea id="query" name="query" rows="4" required></textarea>
+
+        <label for="filename">Select a video file:</label>
+        <select name="filename" id="filename" required>
+            <option value="">-- Select a video --</option>
+            {% for video, filename in all_videos %}
+                <option value="{{ filename }}">{{ filename }}</option>
+            {% endfor %}
+        </select>
+
+
+        <button type="submit">Get Answer</button>
+    </form>
+</body>
+</html>

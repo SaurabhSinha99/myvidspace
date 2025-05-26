@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - EchoVault</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .hint {
+            font-size: 13px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <form method="POST" action="{% url 'signup_cbv' %}">
+        {% csrf_token %}
+
+        <label>First Name:</label><br>
+        <input type="text" name="first_name" value="{{ data.first_name|default_if_none:'' }}" required><br>
+        {% if errors.first_name %}
+            <div class="error">{{ errors.first_name.0 }}</div>
+        {% endif %}
+        <br>
+
+        <label>Last Name:</label><br>
+        <input type="text" name="last_name" value="{{ data.last_name|default_if_none:'' }}" required><br>
+        {% if errors.last_name %}
+            <div class="error">{{ errors.last_name.0 }}</div>
+        {% endif %}
+        <br>
+
+        <label>Mobile Number:</label><br>
+        <input type="text" name="mobile_number" value="{{ data.mobile_number|default_if_none:'' }}" required><br>
+        {% if errors.mobile_number %}
+            <div class="error">{{ errors.mobile_number.0 }}</div>
+        {% endif %}
+        <br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" value="{{ data.email|default_if_none:'' }}" required><br>
+        {% if errors.email %}
+            <div class="error">{{ errors.email.0 }}</div>
+        {% endif %}
+        <br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br>
+        <small class="hint">
+            Password must be at least 8 characters long, and contain:<br>
+            - At least one uppercase or lowercase letter<br>
+            - At least one number<br>
+            - At least one special character (e.g., !@#$%^&*)
+        </small><br>
+        {% if errors.password %}
+            <div class="error">{{ errors.password.0 }}</div>
+        {% endif %}
+        <br>
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <p>Already have an account? <a href="{% url 'login_cbv' %}">Login here</a></p>
+</body>
+</html>

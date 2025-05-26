@@ -1,0 +1,22 @@
+<!-- ocr_search.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Search - EchoVault</title>
+</head>
+<body>
+    <h1>OCR Keyword Search</h1>
+    <form method="POST" action="{% url 'ocr_search_cbv' %}">
+        {% csrf_token %}
+        <label>Video Path:</label><br>
+        <input type="text" name="video_path" placeholder="/media/videos/your_video.mp4" required><br><br>
+
+        <label>Keyword to Search:</label><br>
+        <input type="text" name="keyword" required><br><br>
+
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

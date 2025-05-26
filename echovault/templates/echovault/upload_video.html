@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .upload-form {
+            margin-bottom: 40px;
+        }
+
+        .upload-form input[type="file"] {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .upload-form button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .upload-form button:hover {
+            background-color: #45a049;
+        }
+
+        .video-gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .video-card {
+            flex: 0 0 auto;
+            width: 200px;
+            text-align: center;
+        }
+
+        .video-card video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .video-title {
+            font-size: 14px;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Upload New Video</h1>
+
+    <form class="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="video" accept="video/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- Go to Result Page Button -->
+    <form method="get" action="{% url 'upload_result_direct' %}">
+        <button type="submit" style="margin-left: 10px; background-color: #007bff;">Go to Results</button>
+    </form>
+
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <h2>Previously Uploaded Videos</h2>
+    <div class="video-gallery">
+        {% for video in all_videos %}
+            <div class="video-card">
+                <video controls>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-title" title="{{ video.video_file.name|cut:'videos/' }}">
+                    {{ video.video_file.name|cut:'videos/' }}
+                </div>
+            </div>
+        {% empty %}
+            <p>No videos uploaded yet.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+
+

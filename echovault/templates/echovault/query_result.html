@@ -1,0 +1,16 @@
+<!-- templates/echovault/query_result.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Result</title>
+</head>
+<body>
+    <h1>Query Result</h1>
+    <p><strong>Question:</strong> {{ query }}</p>
+    <p><strong>Answer:</strong> {{ answer }}</p>
+
+    <form method="get" action="{% url 'query_vectorstore' %}">
+        <button type="submit">Ask Another Question</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,134 @@
+
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Result</title>
+    <style>
+        .video-gallery {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            gap: 20px;
+        }
+
+        .video-card {
+            flex: 0 0 auto;
+            width: 200px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .video-card p {
+            max-width: 180px;
+            margin-top: 5px;
+            font-size: 14px;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .main-video {
+            margin-bottom: 20px;
+        }
+
+        .transcript-box {
+            max-height: 300px;
+            max-width: 800px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            overflow: auto;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        .query-form {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .answer-box {
+            max-width: 800px;
+            padding: 15px;
+            border: 1px solid #4caf50;
+            border-radius: 6px;
+            background-color: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transcript</h1>
+    <div class="transcript-box">
+        <pre>{{ transcript }}</pre>
+    </div>
+
+    <h2>Uploaded Video</h2>
+    <div class="main-video">
+        <video width="640" height="360" controls>
+            <source src="{{ video.video_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p><strong>{{ video.video_file.name|slice:"7:" }}</strong></p>
+    </div>
+
+    <!-- Embedded Query Form -->
+    <div class="query-form">
+        <h2>Ask a Question About a Video</h2>
+        <form method="post" action="{% url 'query_vectorstore' %}">
+            {% csrf_token %}
+            <label for="filename">Select video:</label>
+            <select name="filename" id="filename" required>
+                <option value="">-- Select a video --</option>
+                {% for vid in all_videos %}
+                    {% with vid.video_file.name|slice:"7:" as filename %}
+                        <option value="{{ filename }}" {% if filename == selected_filename %}selected{% endif %}>
+                            {{ filename }}
+                        </option>
+                    {% endwith %}
+                {% endfor %}
+            </select><br><br>
+
+            <label for="query">Enter your question:</label><br>
+            <textarea id="query" name="query" rows="4" cols="50" required>{{ query }}</textarea><br><br>
+
+            <button type="submit">Get Answer</button>
+        </form>
+
+        {% if answer %}
+            <h3>Answer:</h3>
+            <div class="answer-box">
+                {{ answer }}
+            </div>
+        {% endif %}
+    </div>
+
+    <h2>Previously Uploaded Videos</h2>
+    <div class="video-gallery">
+        {% for vid in all_videos %}
+            <div class="video-card">
+                <video width="200" controls>
+                    <source src="{{ vid.video_file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>{{ vid.video_file.name|slice:"7:" }}</p>
+            </div>
+        {% empty %}
+            <p>No previous videos found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
