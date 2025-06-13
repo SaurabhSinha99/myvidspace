@@ -22,7 +22,7 @@ env_path = Path(__file__).resolve().parent.parent / '.env'
 
 load_dotenv(dotenv_path=env_path)
 
-
+APPEND_SLASH = False
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get("Django_Secret_Key")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") #['127.0.0.1']
 
@@ -59,7 +59,22 @@ INSTALLED_APPS = [
     # If you're using DRF, also include:
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_extensions',
 ]
+
+
+# settings.py
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get('EMAIL_HOST')  # or your email provider's SMTP server
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT'))
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Use app password for Gmail or similar
+
+PASSWORD_RESET_TIMEOUT = 3600
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 AUTH_USER_MODEL = 'echovault.CustomUser'

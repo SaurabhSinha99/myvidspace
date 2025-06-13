@@ -1,5 +1,4 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Upload Result</title>
@@ -38,7 +37,7 @@
             margin-bottom: 20px;
         }
 
-        .transcript-box {
+        .summary-box {
             max-height: 300px;
             max-width: 800px;
             padding: 15px;
@@ -68,21 +67,33 @@
             border-radius: 6px;
             background-color: #e8f5e9;
         }
+
+        #results {
+            margin-top: 20px;
+            max-width: 800px;
+        }
+
+        #results div {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
-    <h1>Transcript</h1>
-    <div class="transcript-box">
-        <pre>{{ transcript }}</pre>
+    <h1>Summary</h1>
+    <div class="summary-box">
+        <pre>{{ summary }}</pre>
     </div>
 
     <h2>Uploaded Video</h2>
     <div class="main-video">
-        <video width="640" height="360" controls>
-            <source src="{{ video.video_file.url }}" type="video/mp4">
+        <video id="videoPlayer" width="640" height="360" controls>
+            <source id="videoSource" src="{{ video.video_file.url }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <p><strong>{{ video.video_file.name|slice:"7:" }}</strong></p>
+        <p><strong id="videoTitle">{{ video.video_file.name|slice:"7:" }}</strong></p>
     </div>
 
     <!-- Embedded Query Form -->
@@ -130,5 +141,35 @@
             <p>No previous videos found.</p>
         {% endfor %}
     </div>
+
+    <!-- ✅ JavaScript Section -->
+    <script>
+    // CSRF helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            for (let cookie of document.cookie.split(';')) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Handle main video change from dropdown
+    document.getElementById("filename").addEventListener("change", function () {
+        const selectedVideo = this.value;
+        const videoPlayer = document.getElementById("videoPlayer");
+        const videoSource = document.getElementById("videoSource");
+        const title = document.getElementById("videoTitle");
+
+        videoSource.src = `/media/videos/${selectedVideo}`; // Update path as per your media root
+        videoPlayer.load();
+        title.textContent = selectedVideo;
+    });
+    </script>
 </body>
 </html>

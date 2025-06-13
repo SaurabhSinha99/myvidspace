@@ -8,16 +8,23 @@
 </head>
 <body>
     <h1>Login</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
     <form method="POST" action="{% url 'login_cbv' %}">
         {% csrf_token %}
         <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        <input type="email" name="email" required value="{{ email|default:'' }}"><br><br>
 
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
 
         <button type="submit">Login</button>
     </form>
+
+    <p><a href="{% url 'password_reset_request' %}">Forgot Password?</a></p>
     <p>Don't have an account? <a href="{% url 'signup_cbv' %}">Sign up here</a></p>
 </body>
 </html>

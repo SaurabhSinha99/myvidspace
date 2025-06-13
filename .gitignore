@@ -20,6 +20,8 @@ local_settings.py
 media/
 videos/
 vectorstore/
+video_frames/
+video_json/
 
 # Static files collected (not source static/)
 staticfiles/
